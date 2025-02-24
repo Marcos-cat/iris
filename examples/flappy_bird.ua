@@ -69,10 +69,10 @@ I~Screen!°FPS 60
 
 HandleMenuState ← |1 (
   Bird!(Draw 0.5 New)
-  I~Draw!⬚Centered Text Black 60 [÷2WindowWidth 180] "Uiua Bird"
+  I~Draw~Centered~Text Black 60 [÷2WindowWidth 180] "Uiua Bird"
 
   ⨬⋅"Press space to start" $"High score: _" ⊸±⊸State~Menu~HighScore
-  I~Draw!⬚Centered Text Black 40 [÷2WindowWidth 280]
+  I~Draw~Centered~Text Black 40 [÷2WindowWidth 280]
 
   # When space is pressed - create a new game state
   I~Key~Pressed‼@\s(State~New State~Menu~HighScore)
@@ -145,7 +145,7 @@ HandleGameOverState ← (
   ⊸{⊃("Game over"
     | $"Your score: _" State~GameOver~Score
     | "Press space to restart")}
-  I~Draw!⬚Centered Text Black 40_40_20 ⍉⊟÷₂WindowWidth +180×70⇡3
+  I~Draw~Centered~Text Black 40_40_20 ⍉⊟÷₂WindowWidth +180×70⇡3
 
   # Draw white flash with opacity based on the time elapsed since game over
   ↥0+1-I~Time ⊸State~GameOver~DeathTime
