@@ -313,7 +313,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # `⍜LoadFile` will load the texture, and then free the memory when the function is over.
   # [NOTE] You cannot load a texture before `Open` is called, it will cause a segfault.
   # Texture ? Path
-  LoadFile ← (⌅(^0|.^0|^1))!(Data ⊙3 Rayua~LoadTexture|Unload)
+  LoadFile ← (⌅(^0|⟜∘^0|^1))!(Data ⊙3 Rayua~LoadTexture|Unload)
 
   # ? Image
   ToFullColor ↚ ⨬(⍉˜⊂1↯3|⍜°⍉⬚1↙₄|⍜°⍉(▽3_1)|∘) ⊸ColorFormat
@@ -354,7 +354,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Calling `Image` will result in an image of the same format.
   # [NOTE] You cannot load a texture before `Open` is called, it will cause a segfault.
   # Texture ? Image
-  LoadImage ← (⌅(^0|^1|.^0|^2))‼(
+  LoadImage ← (⌅(^0|^1|⟜∘^0|^2))‼(
     ⍜Data~Buffer Rayua~LoadTextureFromImage ToRayImage
   | Unload⟜Image
   | Unload)
@@ -436,7 +436,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Exactly like `Rect`, except that the size is a scalar instead of a vector
   # Optional args: Centered
   # ? Color Size Position
-  ~Square [Centered ← 0] Rect!°⊸Centered Centered ⊙(⍉↯2 ⍤"Square only takes real numbers, you might intend to use Rect"≠3⊸type)
+  ~Square [Centered ← 0] Rect!°⊸Centered ⊓Centered ⊙(⍉↯2 ⍤"Square only takes real numbers, you might intend to use Rect"≠3⊸type)
 
   PointOrder ↚ <0/+×⊓+-∩⊸↻₁°⊟≡⊟₃
 
@@ -444,7 +444,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   #
   # The points `A`, `B`, and `C` may be in any order
   # ? Color A B C
-  Triangle ← ≡₀◇(Rayua~DrawTriangle ⍥:◡PointOrder) ⤚⋅⊙⊙∘ ⊓(ColorArg|∩₃PosArg)
+  Triangle ← ≡₀◇(Rayua~DrawTriangle ⍥˜⊙∘◡PointOrder) ⤚⋅⊙⊙∘ ⊓(ColorArg|∩₃PosArg)
 
   Texture ← Texture~Draw
 
@@ -518,7 +518,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # The string will also respect backspace and the Delete key to clear the string
   # EditedText ? Text
   Input ← (
-    ⊸˜∊Delete TypedCodes ⊂:Typed
+    ⊸˜∊Delete TypedCodes ˜⊂Typed
     ⨬(⍥(⍜↻↘₂-₁⊸˜⨂@\0) ⧻⊚⊸=@\0 ˜⊂ ˜⊏"\0\n\t"▽⊸≠∞⬚∞⨂[Backspace Enter Tab]
     | ⋅⋅"")
   )
