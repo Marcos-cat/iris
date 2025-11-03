@@ -54,7 +54,7 @@ T ← Transform
 
   # Check if a rectangle and a circle collide
   # Collided ? Rect Radius Center
-  RectCircle ← > ⌵- ⊸(↥⊙↧) °⊟\+°⍉°T~Coords ⊙:
+  RectCircle ← > ⌵- ↥⊙∪⌟⊸↧∘ °⊟\+°⍉°T~Coords
 └─╴
 
 # 0 = Black and white, 1 = Color, 2 = Black and white alpha, 3 = Color alpha
