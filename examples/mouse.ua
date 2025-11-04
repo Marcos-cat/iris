@@ -1,11 +1,11 @@
 # Experimental!
-I ~ "git: github.com/Marcos-cat/iris"
+I ~ "gh: Marcos-cat/iris"
 
 DrawCursor ← (
   # Gray if the mouse is up, Green if down
-  ⨬(÷₂White|Green) I~Mouse!(Down Left_Right)
+  ⨬([0.5 0.5 0.5]|Green) I~Mouse!(Down Left_Right)
   # Draw sectors with a radius of 30, starting at the top, and half a circle
-  I~Draw~Circle⊙30 Angle:⊟⊸¯ 1/2
+  I~Draw~Circle!°⊸Angle ⊟⊸¯ 1/2 ⊙30
 )
 
 DrawTrail ← I~Draw~Line Red 5 ⧈⊙∘

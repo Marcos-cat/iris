@@ -12,7 +12,7 @@ the top.
 
 ```uiua
 # Experimental!
-I ~ "git: github.com/Marcos-cat/iris"
+I ~ "gh: Marcos-cat/iris"
 
 I~Open 500_500 "The Title"
 
