@@ -3,55 +3,81 @@ I ~ "gh: Marcos-cat/iris" ~ Color Draw Key Window
 
 W ← 1024
 
-F  ← ℂ÷₂W 200
-L₁ ← 250
-L₂ ← 150
-M₁ ← 100
-M₂ ← 100
-Mt ← +M₁M₂
-G  ← 1000
+~P [
+  θ₁ ← η
+  θ₂ ← η/3
+  θ′₁ ← 0
+  θ′₂ ← ¯8
+  L₁ ← 250
+  L₂ ← 150
+  M₁ ← 100
+  M₂ ← 500
+  G ← 1e3
+]
+
+~S [
+  Play ← 0
+  Edit ← ∞
+]
+
+F ← ℂ÷₂W 200
 
 # https://www.myphysicslab.com/pendulum/double-pendulum-en.html
-Δθ ← ˜-∩⊣
-Q  ← +×₂M₁+M₂ ¯×M₂∂∿×₂Δθ
-θ″₁ ← ÷⊃(
-  ×L₁ Q
+Δθ ← -P!⊃θ₂ θ₁
+Q  ← /+P!⊃[×2M₁|M₂|¯×⊃(M₂|∂∿×2Δθ)]
+θ″₁ ← ÷P!⊃(
+  ×⊃L₁ Q
 | /+⊃[
-    ¯×₂×G×Mt∿⊣
-  | ¯×M₂×G∿˜-⊙×₂∩⊣
-  | ¯×₂×M₂ ×⊃(∿Δθ|+⊃(
-        ×L₂ⁿ₂⋅⊢
-      | ×L₁×⊃(ⁿ₂⊢|∂∿˜-∩⊣)))
+    ¯/×⊃[G|+×2⊃M₁ M₂|∿θ₁]
+  | ¯/×⊃[M₂|G|∿-×2⊃θ₂ θ₁]
+  | ¯/×⊃[
+      2 | ∿Δθ | M₂
+    | +⊃(×⊃(ⁿ₂θ′₂|L₂)|/×⊃[ⁿ₂θ′₁|L₁|∂∿Δθ])]
   ]
 )
-θ″₂ ← ÷⊃(
-  ×L₂ Q
-| ×⊃(
-    ×₂∿Δθ
+θ″₂ ← ÷P!⊃(
+  ×⊃L₂ Q
+| /×⊃[
+    2 | ∿Δθ
   | /+⊃[
-      ×L₁×Mt ⁿ₂⊢
-    | ×G×Mt ∂∿⊣
-    | ×⊃(ⁿ₂⋅⊢|×L₂×M₂ ∂∿Δθ)]
-  ))
+      /×⊃[ⁿ₂θ′₁|L₁|+⊃M₁ M₂]
+    | /×⊃[G|+⊃M₁ M₂|∂∿θ₁]
+    | /×⊃[ⁿ₂θ′₂|L₂|M₂|∂∿Δθ]]
+  ]
+)
 
-0
+Sim ← P!⍜(
+  ⊙⊙(∩⊟⊃(θ′₁|θ₁|θ′₂|θ₂))
+| ˜∩(↘₁\(+×)Window~Dt⊂)
+) ⊸⊃θ″₁ θ″₂
 
-[1 η] [0 η/3] # [θ₁' θ₁] [θ₂' θ₂]
+Pos ← \+[F∩(×ℂ°∠)P!⊃(θ₁|L₁|θ₂|L₂)]
+
+P S
 
 I~Open W "Pendulum"
 I~Loop!(
   Draw~Background Color~Base
 
-  Window~FPS
+  ⊸P!⊃(Window~FPS|M₁|M₂|L₁|L₂|G)
   $$ FPS: _
+  $$ M1 M2: _ _ 
+  $$ L1 L2: _ _ 
+  $$ G: _
   $$ Pause [Space]
   Draw~Text!°⊸Font"examples/Uiua386.ttf" Color~Red 32 ℂ16 16
+  ⊙S!(
+    Key~Pressed‼@\s⍜Play¬
+    °⊸Edit ⬚∞⊢⊚ Key~Down "12345"
+  )
 
-  Key~Pressed‼@\s ⊙⊙¬
+  ⊸≠∞◡⋅S~Edit
+  P!⨬◌⍜⨬(M₁|M₂|L₁|L₂|G)(⁅+×Window~Dt×500/-Key~Down "jk")
+  P!⍜⊃(M₁|M₂|L₁|L₂|G)∩₅(↥10)
+  ⍥Sim◡⋅S~Play
 
-  ⍥(˜∩(↘₁\(+×)Window~Dt⊂) ◡⊃θ″₁ θ″₂) ⤙⊙⊙∘
-
-  ◡[F⟜++F˜∩×L₁L₂∩(ℂ°∠⊣)]
-  ⊃(Draw~Circle Color~Red ×2√ 50_M₁_M₂
-  | Draw~Line Color~Red 8 ⧈⊙∘)
+  ⊸⊃(
+    Draw~Circle Color~Red ⊃(⊂20 √⊟P!⊃M₁ M₂|Pos)
+  | Draw~Line Color~Red 8 ⧈⊙∘ Pos
+  )
 )
