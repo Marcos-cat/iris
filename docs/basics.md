@@ -25,11 +25,12 @@ following:
 These features are organized into different
 [modules](https://www.uiua.org/tutorial/modules) so that names can be shorter.
 
-Let's spin up a simple example that is the scaffolding of almost Iris project.
+Let's spin up a simple example that has the scaffolding for almost every Iris
+project.
 
 ```uiua
 # Experimental!
-I ~ "git: github.com/Marcos-cat/iris"
+I ~ "gh: /Marcos-cat/iris"
 
 I~Open 800_500 "The Title"
 
@@ -43,10 +44,11 @@ We start by importing Iris from GitHub. I like to import it as `I` because
 is up to you.
 
 The next line is setting up the window with `Open`. `Open` takes the dimensions
-of the window and a title to name the window. `Open` well, opens the window.
-Many functions must be called after calling `Open`, or the program might crash.
-If a function has to be called like this it will say so in its documentation.
-But to play it safe, Iris functions should generally be called after `Open`.
+of the window and a title to name the window. Then `Open`, well, opens the
+window. Many functions require that `Open` was called before them, or they
+cannot work, and may crash the program. If a function has to be called like this
+it will say so in its documentation. But to play it safe, Iris functions should
+generally be called after `Open`.
 
 The final section is the most important: the `Loop!` macro. The function you
 give to `Loop!` is called every single frame to render your project. `Loop!`
@@ -86,7 +88,7 @@ gotten a sneak-peak of the first module: `Draw`. `Draw` contains functions for
 drawing different geometries and visuals onto the window. Here's an example that
 draws a basic smiley face.
 
-```
+```uiua
 Width  ← 600
 Height ← 500
 I~Open Width_Height "Smile"
@@ -95,9 +97,9 @@ I~Loop!(
   I~Draw~Background Black
 
   I~Draw~Circle Yellow 150 300_250
-  I~Draw~Circle Start:1/4 Angle:1/2 Red 50 ℂ÷₂Width280
+  I~Draw~Circle!(°⊸Start1/4 °⊸Angle1/2) Red 50 ℂ÷₂Width 280
 
-  I~Draw~Square Centered:1 Black 40 ℂ⊙200 [⊃+-60 ÷₂Width]
+  I~Draw~Square!°⊸Centered1 Black 40 ℂ⊙200 [⊃+-60 ÷₂Width]
 )
 ```
 
@@ -121,14 +123,16 @@ I~Draw~Circle
 ℂ÷₂Width280         # The position of the mouth
 50                  # The radius of the mouth
 Red                 # The color to draw the mouth
-Start:1/4 Angle:1/2 # How much of the circle to draw to get a semicircle
-I~Draw~Circle
+I~Draw~Circle!(
+  °⊸Start1/4 °⊸Angle1/2 # How much of the circle to draw to get a semicircle
+)
 
 ℂ⊙200 [⊃+-60 ÷₂Width] # The two positions of the eyes
 40                    # The side length of the squares for both eyes
 Black                 # The color to draw both eyes
-Centered:1            # Draw the center of the square at the given position, instead of the corner of the square
-I~Draw~Square
+I~Draw~Square!(
+  °⊸Centered1 # Draw the center of the square at the given position, instead of the corner of the square
+)
 ```
 
 For both `Circle` and `Square` the order of arguments is 'color - size -
@@ -145,7 +149,7 @@ convenient for it to be at the bottom of the arguments.
 The final point is the star feature that motivated me to write Iris. You may
 have noticed that `Square` is only called *once* in the code, but the face has
 *two* square eyes. Both eyes are drawn because `Square` was given two different
-complex numbers as the position to draw the the squares. All Iris functions that
+complex numbers as the position to draw the squares. All Iris functions that
 can be are pervasive. If you give them multiple values in an array, they work on
 all the values. When calling `Square` I didn't need to use `≡ rows` or `¤ fix`
 anywhere for it to work. This is very helpful when writing games. For example,

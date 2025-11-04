@@ -8,7 +8,7 @@
 
 ```uiua
 # Experimental!
-I ~ "git: github.com/Marcos-cat/iris"
+I ~ "gh: Marcos-cat/iris"
 ```
 
 ## Features
@@ -53,6 +53,7 @@ work. It also means that you can use the
 - [Fractal Zoom](https://github.com/ronondex2009/Uiua-Interactive-Fractal-Zoomer)
 - [Minesweeper](https://github.com/Marcos-cat/minesweeper-uiua)
 - [Bejeweled](https://github.com/donstenzel/bejeweled-uiua)
+- [Takua](https://github.com/Omnikar/takua)
 
 ## Modules
 
