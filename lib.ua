@@ -476,6 +476,10 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # IsPressed ? Key
   Pressed ← ≡₀◇(Rayua~IsKeyPressed Fix)
 
+  # Check if a key was released once
+  # IsPressed ? Key
+  Released ← ≡₀◇(Rayua~IsKeyReleased Fix)
+
   # Check if a key is down
   # IsDown ? Key
   Down ← ≡₀◇(Rayua~IsKeyDown Fix)
@@ -487,6 +491,16 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # ? Key Function
   Pressed‼ ← (
     {/∨ Pressed ⍤"At least one key must be specified"⊸(±⧻) ♭ ^0}
+    ⍥(^1) ⨬(°□₁|×⊙(/×Down♭) °□₂) ⊸(-₁⧻)
+  )
+
+  # Call a function when a key is released
+  # 
+  # The first function is the key to run the function on (or identity to take from the stack)
+  # The second function will be called when the key is released
+  # ? Key Function
+  Released‼ ← (
+    {/∨ Released ⍤"At least one key must be specified"⊸(±⧻) ♭ ^0}
     ⍥(^1) ⨬(°□₁|×⊙(/×Down♭) °□₂) ⊸(-₁⧻)
   )
 
@@ -553,6 +567,10 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # IsPressed ? Button
   Pressed ← ≡₀Rayua~IsMouseButtonPressed
 
+  # Check if a mouse button was released once
+  # IsReleased ? Button
+  Released ← ≡₀Rayua~IsMouseButtonReleased
+
   # Check if a mouse button is down
   # IsDown ? Button
   Down ← ≡₀Rayua~IsMouseButtonDown
@@ -598,6 +616,13 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # The second function will be called with the mouse position as its first argument
   # ? Button Function
   Pressed‼ ← ⍥(^1 Pos)Pressed ^0
+
+  # Call a function on the mouse position when a button is released
+  # 
+  # The first function is the button to run the function on (or identity to take from the stack)
+  # The second function will be called with the mouse position as its first argument
+  # ? Button Function
+  Released‼ ← ⍥(^1 Pos)Released ^0
 
   # Call a function on the mouse position when a button is down
   # 
