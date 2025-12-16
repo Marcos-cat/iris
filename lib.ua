@@ -293,18 +293,28 @@ PosArg  ↚ ≡₁□ T~Coords
 IsTexture ↚ ≍□"texture"⬚∞⊣
 
 ┌─╴Texture
-  ≁Data {Buffer ColorFormat Type ← "texture"}
+  ≁TxData {Buffer ColorFormat Type ← "texture"}
+  ≁AnimData {
+    Frames
+    Size
+    Buffer
+    ColorFormat
+    Type ← "animation"
+  }
 
   # Unload a texture, freeing it's memory
   #
   # Once a texture is unloaded, attempting to draw it will result in an all-black texture.
   # Calling this function multiple times on a texture will not doing anything.
   # ? Texture
-  Unload ← Rayua~UnloadTexture Data~Buffer
+  Unload ← Rayua~UnloadTexture TxData~Buffer
 
-  # Get the dimensions of a texture
-  # Size ? Texture
-  Size ← ℂ≡₁(Rayua~Texture!⊃Width Height Data~Buffer)
+  # Get the dimensions of a texture, or of one frame of an animation
+  # Size ? TextureOrAnimation
+  Size ← (
+    ⊸(⨂{"texture" "animation"}⊣)
+    ⨬(ℂ≡₁(Rayua~Texture!⊃Width Height TxData~Buffer)|≡₁(/ℂAnimData~Size))
+  )
 
   # Load a texture from a filepath
   #
@@ -313,22 +323,25 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # `⍜LoadFile` will load the texture, and then free the memory when the function is over.
   # [NOTE] You cannot load a texture before `Open` is called, it will cause a segfault.
   # Texture ? Path
-  LoadFile ← (⌅(^0|⟜∘^0|^1))!(Data ⊙3 Rayua~LoadTexture|Unload)
+  LoadFile ← (⌅(^0|⟜∘^0|^1))!(TxData~New ⊙3 Rayua~LoadTexture|Unload)
 
   # ? Image
   ToFullColor ↚ ⨬(⍉˜⊂1↯3|⍜°⍉⬚1↙₄|⍜°⍉(▽3_1)|∘) ⊸ColorFormat
 
+  # Convert an rgba image into a particular color format
   # ? Data Image
-  ToFormat ↚ |2 ⨬(⊢°⍉|⍜°⍉↙₃|⍜°⍉(⊏0_3)|∘) Data~ColorFormat
+  ToFormat ↚ ⨬(⊢°⍉|⍜°⍉↙₃|⍜°⍉(⊏0_3)|∘) TxData~ColorFormat
 
   # Reads the literal bytes from the buffer with no processing, only shaping
-  ReadImageData ↚ ↯⤙(&memcpy⊙/×) Rayua~Image!(Data⟜[⊃Height Width⊙4]) Data~Buffer
+  ReadImageData ↚ ↯⤙(&memcpy⊙/×) Rayua~Image!(Data⟜[⊃Height Width⊙4]) TxData~Buffer
 
   ToRayImage ↚ ⌅(
-    Data ⊃(Rayua~Image ⊃(♭ °Color~Rgb ToFullColor|°⊟⇌△₂|1 7)|ColorFormat)
-  | Rayua~UnloadImage ⟜(Data~Buffer|ToFormat|Color~Rgb ReadImageData))
+    TxData~New ⊃(Rayua~Image ⊃(♭ °Color~Rgb ToFullColor|°⊟⇌△₂|1 7)|ColorFormat)
+  | Rayua~UnloadImage ⟜(TxData~Buffer|ToFormat|Color~Rgb ReadImageData))
 
-  ImageAndTextureData ↚ ⊓(⊃(⇌△₂) ColorFormat|⊃(⊟°ℂSize) Data~ColorFormat)
+  # ImgDim ImgColor TexDim TexColor ? Image Texture
+  ImageAndTextureData ↚ ⊓(⊃(⇌△₂) ColorFormat|⊃(⊟°ℂSize) TxData~ColorFormat)
+
   ImageError ↚ ⨬(
     ∩($"_ _"⊓/$"_x_"FormatName) ImageAndTextureData
     ˜⍤0 $"A _ image was provided, but the texture is a _ image."
@@ -343,8 +356,8 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Image ? Texture
   # Track caller!
   Image ← (⌅(^0|⟜^0|^1))!(
-    °ToRayImage ⍜Data~Buffer Rayua~LoadImageFromTexture
-  | ⟜(Rayua~UpdateTexture Data~Buffer)⊙(♭ °Color~Rgb ToFullColor) ◡˜ImageError)
+    °ToRayImage ⍜TxData~Buffer Rayua~LoadImageFromTexture
+  | ⟜(Rayua~UpdateTexture TxData~Buffer)⊙(♭ °Color~Rgb ToFullColor) ◡˜ImageError)
 
   # Load a texture from a Uiua image array
   #
@@ -355,9 +368,11 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # [NOTE] You cannot load a texture before `Open` is called, it will cause a segfault.
   # Texture ? Image
   LoadImage ← (⌅(^0|^1|⟜∘^0|^2))‼(
-    ⍜Data~Buffer Rayua~LoadTextureFromImage ToRayImage
+    ⍜TxData~Buffer Rayua~LoadTextureFromImage ToRayImage
   | Unload⟜Image
   | Unload)
+
+  LoadFrames ← AnimData~New⊃(⧻|⇌△₂⊢|TxData!⊃(Buffer|ColorFormat) ToRayImage /⊂)
 
   # Draw a texture on the window
   #
@@ -367,10 +382,12 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # ? Texture Size Pos
   ~Draw {Color ← White|Angle ← 0|Centered ← 0} (
     ⊃(Color|Angle|⋅∘|Centered)
-    ⊓(ColorArg | ×360◿1 | ≡₁⊃(□Data~Buffer|□⊂0_0⊟°ℂSize)
+    ⊓(ColorArg | ×360◿1 | ≡₁⊃(□TxData~Buffer|□⊂0_0⊟°ℂSize)
     | ⊃(≡₀⍚⊂ ⍥(+◡⋅÷₂)¬|⋅⋅÷₂) ⊙˜⊓PosArg SizeArg)
     ≡₀◇Rayua~DrawTexturePro S!cdefba
   )
+
+  LoadFrames ←
 └─╴
 
 # Draw different shapes onto the window
