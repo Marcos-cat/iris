@@ -54,6 +54,7 @@ work. It also means that you can use the
 - [Minesweeper](https://github.com/Marcos-cat/minesweeper-uiua)
 - [Bejeweled](https://github.com/donstenzel/bejeweled-uiua)
 - [Takua](https://github.com/Omnikar/takua)
+- [Snake](https://github.com/shadowninja55/snake)
 
 ## Modules
 
