@@ -21,18 +21,18 @@ I~Loop!(
   I~Draw~Circle⊙30
 
   # Face buttons
-  +ℂ480 200 ×30I~Transform![Down Right Left Up]
+  +ℂ480 200 ×30 I~Transform![Down Right Left Up]
   I~Gamepad!(Down 0 Button![South East West North])
   I~Draw~Circle⊙15 ButtonColor
 
   # D-pad
-  +ℂ160 200 ×30I~Transform![Down Right Up Left]
+  +ℂ160 200 ×30 I~Transform![Down Right Up Left]
   ˙⊂⊟⊸⇌30_20
   I~Gamepad!(Down 0 Button![Down Right Up Left])
   I~Draw~Rect!°⊸Centered 1 ButtonColor
 
   # Bumpers
-  ℂ[⊃-+]200 320 130
+  ℂ[⊃-+] 200 320 130
   50_20
   I~Gamepad!(Down 0 Button![LeftBumper RightBumper])
   I~Draw~Rect!°⊸Centered 1 ButtonColor
