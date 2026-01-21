@@ -667,9 +667,13 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
     # The button code for the right bumper
     RightBumper ← RightTrigger₁
 
-    # The button code for the left bumper
+    # The button code for the left trigger
+    # 
+    # Triggers are usually read as analog axes, but this allows reading them as buttons.
     LeftTrigger ← LeftTrigger₂
-    # The button code for the right bumper
+    # The button code for the right trigger
+    # 
+    # Triggers are usually read as analog axes, but this allows reading them as buttons.
     RightTrigger ← RightTrigger₂
 
     # The button code for the left joystick button
