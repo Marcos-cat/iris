@@ -515,7 +515,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # 
   # This function returns a string of queued characters
   # If the user has not typed since the function was called, the string will be empty
-  # TypedChars ? 
+  # TypedChars ?
   Typed ← (⍥(˜⊂▽⊸≠@\0Rayua~GetCharPressed)∞ "")
 
   # Get the key codes that the user has typed
@@ -603,7 +603,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
 
   # Call a function when the user drags the mouse
   # 
-  # The first function is the mouse button that must be down while dragging. 
+  # The first function is the mouse button that must be down while dragging.
   # If it is monadic it will pull from the stack.
   # The second function is called when a drag occurs and is supplied the distance dragged.
   # If the mouse does not move, this will not trigger, thus the distance cannot be zero.
@@ -634,6 +634,130 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Check if the mouse is on the window
   # IsOnWindow ?
   OnWindow ← (Rayua~IsCursorOnScreen)
+└─╴
+
+# Work with gamepads/game controllers
+# 
+# All functions take a gamepad index as the first input. If you are only using one gamepad, this will probably need to be 0.
+┌─╴Gamepad
+  ┌─╴Button
+    (⍚˙$"_ ← ∘Rayua~GamepadButton~_  # The button code for the _ button\n"
+    )^!(Unknown|LeftFaceUp|LeftFaceRight|LeftFaceDown|LeftFaceLeft|RightFaceUp|RightFaceRight|RightFaceDown|RightFaceLeft|LeftTrigger₁|LeftTrigger₂|RightTrigger₁|RightTrigger₂|MiddleLeft|Middle|MiddleRight|LeftThumb|RightThumb)
+
+    # The button code for the d-pad up button
+    Up ← Rayua~GamepadButton~LeftFaceUp
+    # The button code for the d-pad right button
+    Right ← Rayua~GamepadButton~LeftFaceRight
+    # The button code for the d-pad down button
+    Down ← Rayua~GamepadButton~LeftFaceDown
+    # The button code for the d-pad left button
+    Left ← Rayua~GamepadButton~LeftFaceLeft
+
+    # The button code for the top face button
+    North ← Rayua~GamepadButton~RightFaceUp
+    # The button code for the right face button
+    East ← Rayua~GamepadButton~RightFaceRight
+    # The button code for the bottom face button
+    South ← Rayua~GamepadButton~RightFaceDown
+    # The button code for the left face button
+    West ← Rayua~GamepadButton~RightFaceLeft
+
+    # The button code for the left bumper
+    LeftBumper ← LeftTrigger₁
+    # The button code for the right bumper
+    RightBumper ← RightTrigger₁
+
+    # The button code for the left trigger
+    # 
+    # Triggers are usually read as analog axes, but this allows reading them as buttons.
+    LeftTrigger ← LeftTrigger₂
+    # The button code for the right trigger
+    # 
+    # Triggers are usually read as analog axes, but this allows reading them as buttons.
+    RightTrigger ← RightTrigger₂
+
+    # The button code for the left joystick button
+    LeftStick ← LeftThumb
+    # The button code for the right joystick button
+    RightStick ← RightThumb
+  └─╴
+
+  ┌─╴Axis
+    (⍚˙$"_ ← ∘Rayua~GamepadAxis~_  # The axis code for the _ axis\n"
+    )^!(LeftX|LeftY|RightX|RightY|LeftTrigger|RightTrigger)
+  └─╴
+
+  # Check if a gamepad is available
+  # IsAvailable ? Gamepad
+  Available ← Rayua~IsGamepadAvailable
+
+  # Get the name of a gamepad
+  # Name ? Gamepad
+  Name ← Rayua~GetGamepadName
+
+  # Check if a gamepad button was pressed once
+  # IsPressed ? Gamepad Button
+  Pressed ← ≡₀◇Rayua~IsGamepadButtonPressed
+
+  # Check if a gamepad button was released once
+  # IsReleased ? Gamepad Button
+  Released ← ≡₀◇Rayua~IsGamepadButtonReleased
+
+  # Check if a gamepad button is down
+  # IsDown ? Gamepad Button
+  Down ← ≡₀◇Rayua~IsGamepadButtonDown
+
+  # Call a function when a button is pressed
+  # 
+  # The first function is the gamepad index (or identity to take from the stack)
+  # The second function is the button to run the function on (or identity to take from the stack)
+  # The third function will be called when the button is pressed
+  # ? Gamepad Button Function
+  Pressed‼! ← (
+    /∨ Pressed ⊙(⍤"At least one button must be specified"⊸(±⧻) ♭) ⊓^0^1
+    ⍥^2
+  )
+
+  # Call a function when a button is released
+  # 
+  # The first function is the gamepad index (or identity to take from the stack)
+  # The second function is the button to run the function on (or identity to take from the stack)
+  # The third function will be called when the button is released
+  # ? Gamepad Button Function
+  Released‼! ← (
+    /∨ Released ⊙(⍤"At least one button must be specified"⊸(±⧻) ♭) ⊓^0^1
+    ⍥^2
+  )
+
+  # Call a function when a button is down
+  # 
+  # The first function is the gamepad index (or identity to take from the stack)
+  # The second function is the button to run the function on (or identity to take from the stack)
+  # The third function will be called when the button is down
+  # ? Gamepad Button Function
+  Down‼! ← (
+    /∨ Down ⊙(⍤"At least one button must be specified"⊸(±⧻) ♭) ⊓^0^1
+    ⍥^2
+  )
+
+  # Get the current position of a gamepad axis
+  # AxisMovement ? Gamepad Axis
+  GetAxis ← ≡₀◇Rayua~GetGamepadAxisMovement
+
+  # Get the current position of a joystick as a complex number
+  # 
+  # Takes 0 or 1 for the left or right stick
+  # Position ? Gamepad Stick
+  Stick ← ≡₀◇(/ℂ GetAxis ⊙Axis!⨬[LeftX LeftY][RightX RightY])
+
+  # Get the current position of a trigger as a number from 0 to 1
+  # 
+  # Takes 0 or 1 for the left or right trigger
+  # Position ? Gamepad Stick
+  Trigger ← °(-⊸¬)≡₀◇(GetAxis ⊙Axis!⨬LeftTrigger RightTrigger)
+
+  # ? Gamepad LeftRumble RightRumble Duration
+  Rumble ← Rayua~SetGamepadVibration
 └─╴
 
 # Open a new window with a title
