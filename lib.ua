@@ -19,7 +19,7 @@ S!         ↚^ $"⊃(_)"/$"_|_"˜⍚⊂@∘˜⍚↯@⋅-@a°□₁
     ⨬◌(˜⍤0$"Expected number array with X and Y components, but got shape _")≠2⊸⬚2⊣◌
   | ◌◌
   | ˜⍤0$"Expeced number or complex array, but got a _ array" ⨬"character""box"=1 ⊙◌
-  )⊸⨂0_3 ⊃type△
+  )⊸⊗0_3 ⊃type△
 
   # Convert an array from complex coordinates to vector cooridinates
   #
@@ -37,29 +37,29 @@ T ← Transform
 
 ┌─╴Collide
   # Check if two rectangles collide
-  # Collided ? Size₁ Position₁ Size₂ Position₂
-  Rects ← /×/⊂> ⇌ ˜∩(⊟≡₀⊙∘) ∩˜(⟜+∩°⍉∩T~Coords)
+  # Collided ? SizeA PositionA SizeB PositionB
+  Rects ← /×/⊂> ⇌ ˜∩(⊟≡₀⊙∘) ∩˜(⟜+∩°⍉∩T.Coords)
 
   # Check if two circles collide
-  # Collided ? Radius₁ Center₁ Radius₂ Center₂
-  Circles ← <˜⊓(+|⌵-∩°T~Coords)
+  # Collided ? RadiusA CenterA RadiusB CenterB
+  Circles ← <˜⊓(+|⌵-∩°T.Coords)
 
   # Check if a point is inside a circle
   # Collided ? Radius Center Point
-  CirclePoint ← ≤⊙(⌵-∩°T~Coords)
+  CirclePoint ← ≤⊙(⌵-∩°T.Coords)
 
   # Check if a point is inside a rectangle
   # Collided ? Rect Point
-  RectPoint ← ×××∩°ℂ⊓⌟≥≤ °⊟\+°⍉ ∩°T~Coords
+  RectPoint ← ×××∩°ℂ⊓⌟≥≤ °⊟\+°⍉ ∩°T.Coords
 
   # Check if a rectangle and a circle collide
   # Collided ? Rect Radius Center
-  RectCircle ← > ⌵- ↥⊙∪⌟⊸↧∘ °⊟\+°⍉°T~Coords
+  RectCircle ← > ⌵- ↥⊙∪⌟⊸↧∘ °⊟\+°⍉°T.Coords
 └─╴
 
 # 0 = Black and white, 1 = Color, 2 = Black and white alpha, 3 = Color alpha
 # ? Image
-ColorFormat ↚ ⍤"Image does not have a possible color format"⊸≠4 ⨂{[][3][2][4]} □↘₂△
+ColorFormat ↚ ⍤"Image does not have a possible color format"⊸≠4 ⊗{[][3][2][4]} □↘₂△
 FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
 
 ┌─╴Color
@@ -90,10 +90,10 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
     ⌅(⍤"Hex string must be characters"=1⊸type)
     ⌅(⍥(▽2)⊸(∊3_4⧻) ⍣⌝⊂◌@#|⊂@#)
     ⌅(⍤"Hex string must have 3 or 4 channels"∊[6]_[8]⊸△)
-    ⌅(⍤"Hex string has invalid characters"¬⊸˜∊∞) ⬚∞⨂HexDigits
+    ⌅(⍤"Hex string has invalid characters"¬⊸˜∊∞) ⬚∞⊗HexDigits
     Rgb ⌝⊥16°⌅≡⬚0↙₂ ≡⇌ ⌅(↯∞_2|♭)
     °⌅(⍤"Color must be numbers"=0⊸type
-       ⍤"Color must be 3 or 4 digits"∊[3]_[4]⊸△)
+      ⍤"Color must be 3 or 4 digits"∊[3]_[4]⊸△)
   )
 
   # Get the alpha channel (transparency) of an image
@@ -141,9 +141,9 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # IsFullscreen ?
   # Track caller!
   Full ← ⌅(
-    Rayua~IsWindowFullscreen
+    Rayua.IsWindowFullscreen
   | ⍥⊸(˜⍤0$"Fullscreen state must be a boolean, but it is _"F)¬≍1⊸∊0_1
-    ⍥Rayua~ToggleFullscreen≠Rayua~IsWindowFullscreen)
+    ⍥Rayua.ToggleFullscreen≠Rayua.IsWindowFullscreen)
 
   # The size of the window
   #
@@ -154,14 +154,14 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # If a single number is given as the dimensions, it will be used as both the width and the height.
   # Size ?
   # Track caller!
-  Size ← (°T~Coords ⌅(
-      Os‼macos÷₂ ⊟Rayua~GetRenderWidth Rayua~GetRenderHeight
+  Size ← (°T.Coords ⌅(
+      Os‼macos÷₂ ⊟Rayua.GetRenderWidth Rayua.GetRenderHeight
     | ⍥⊸(˜⍤0$"Window size must be greater than zero, but it is _"F) ¬×⊸⊃(≍1/×>0|≍[2]△) ⌈ ⍥(↯2)≍[]⊸△ °Full 0
-      Rayua~SetWindowSize °⊟))
+      Rayua.SetWindowSize °⊟))
 
   # Get the size of the window when it is fullscreen
   # FullSize ?
-  FullSize ← (°T~Coords⊟ Rayua!⊃GetMonitorWidth GetMonitorHeight Rayua~GetCurrentMonitor)
+  FullSize ← (°T.Coords⊟ Rayua!⊃GetMonitorWidth GetMonitorHeight Rayua.GetCurrentMonitor)
 
   # The active FPS (framerate)
   #
@@ -171,16 +171,16 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # FPS ?
   # Track caller!
   FPS ← ⌅(
-    Rayua~GetFPS
+    Rayua.GetFPS
   | ⍥⊸(˜⍤0$"FPS must be greater than zero, but it is _"F)¬×⊸⊃(>0|≍[]△) ⌈
-    Rayua~SetTargetFPS)
+    Rayua.SetTargetFPS)
 
   # Delta-time since last frame in seconds
   # DeltaTime ?
-  Dt ← (Rayua~GetFrameTime)
+  Dt ← (Rayua.GetFrameTime)
 
   # Sets the trace log to `DEBUG`, printing extra information about what Raylib is doing
-  Debug ← Rayua~SetTraceLogLevel Rayua~TraceLogLevel~Debug
+  Debug ← Rayua.SetTraceLogLevel Rayua.TraceLogLevel.Debug
 └─╴
 
 ┌─╴Net
@@ -194,8 +194,8 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   IsTunnel! ↚ ⊸(⍤$"_ must take a connection"^≍□"connection"⊣)
 
   # This could probably be done better with a system function for looking at PATH
-  HasBore ↚ memo(
-    ⍚⍜⇌(↙⊸˜⨂pathsep) /◇⊂⍚⍣&fld[] ⊜□⊸≠ ˜⊏":;" ≍"windows"osfamily &var"PATH"
+  HasBore ↚ memo!(
+    ⍚⍜⇌(↙⊸˜⊗pathsep) /◇⊂⍚⍣&fld[] ⊜□⊸≠ ˜⊏":;" ≍"windows"osfamily &var"PATH"
     ˜∊□ ⊂"bore" ⍥(⊂@.)⊸(±⧻) exeext
     ⍤"`bore` must be installed to use Net. Install it with `$ cargo install bore-cli`"
   )
@@ -204,7 +204,7 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   #
   # This is the port that must be shared to another program to connect them.
   # Calling this on a non-bore tunnel will error
-  Port ← ⍤"Port must take a tunnel using bore"⊸(¬≍∞) Tunnel~RecvPort IsTunnel!"Port"
+  Port ← ⍤"Port must take a tunnel using bore"⊸(¬≍∞) Tunnel.RecvPort IsTunnel!"Port"
 
   # ProcStream RecvPort ? LocalPort
   InitBore ↚ (
@@ -215,7 +215,7 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   )
 
   # Thread ? LocalPort
-  StartThread ↚ spawn⍢(⍣(send0°binary ⍜(&tcpa|&rb∞ ⊸&tcpsrt0.5)|⋅&ep)|1) &tcpl $"localhost:_"
+  StartThread ↚ spawn!⍢(⍣(send0°binary ⍜(&tcpa|&rb∞ ⊸&tcpsrt0.5)|⋅&ep)|1) &tcpl $"localhost:_"
 
   # Start a network tunnel
   #
@@ -232,7 +232,7 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # This cleans up the bore process if the tunnel used bore, and does nothing otherwise.
   # ? Tunnel
   # Track caller!
-  End ← ⍥&cl ⊸(¬≍∞) Tunnel~BoreProc IsTunnel!"End"
+  End ← ⍥&cl ⊸(¬≍∞) Tunnel.BoreProc IsTunnel!"End"
 
   # Connect a tunnel to a certain port
   #
@@ -240,13 +240,13 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # If not using bore, port can be a full IP address with a port.
   # ? Port Tunnel
   # Track caller!
-  Connect ← °⊸Tunnel~SendAddr ⍥$"bore.pub:_"⊸(≍0type) ⍣⋕∘ ⊙IsTunnel!"Connect"
+  Connect ← °⊸Tunnel.SendAddr ⍥$"bore.pub:_"⊸(≍0type) ⍣⋕∘ ⊙IsTunnel!"Connect"
 
   # Check if a tunnel is set up to send values to another
   #
   # IsConnected ? Tunnel
   # Track caller!
-  Connected ← ¬≍∞Tunnel~SendAddr IsTunnel!"Connected"
+  Connected ← ¬≍∞Tunnel.SendAddr IsTunnel!"Connected"
 
   # Send a value to a different program
   #
@@ -254,7 +254,7 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # The value can be any array.
   # ? Value Tunnel
   # Track caller!
-  Give ← ⍜(&tcpc|˜&w ⊸&tcpswt0.5) ⊃(⋅Tunnel~SendAddr|binary|⍤"You cannot give a value on an unconnected tunnel"Connected◌) ⊙IsTunnel!"Give"
+  Give ← ⍜(&tcpc|˜&w ⊸&tcpswt0.5) ⊃(⋅Tunnel.SendAddr|binary|⍤"You cannot give a value on an unconnected tunnel"Connected◌) ⊙IsTunnel!"Give"
 
   # Attempt to get a value from a tunnel
   #
@@ -262,7 +262,7 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   # If the optional argument `Block` is `1`, `TryGet` will block the program until a value is sent.
   # Value ? Tunnel
   # Track caller!
-  ~TryGet {Block ← 0} ⨬(⍣(tryrecv|°◌|˜⍤0"No value has been sent yet")|recv) ⊓(Block|Tunnel~TcpThread IsTunnel!"Get")
+  ~TryGet {Block ← 0} ⨬(⍣(tryrecv|°◌|˜⍤0"No value has been sent yet")|recv) ⊓(Block|Tunnel.TcpThread IsTunnel!"Get")
 
   # Call a function when a value is sent through a tunnel
   Get! ← ⍣(⍩^TryGet)◌ IsTunnel!"Get!"
@@ -272,23 +272,23 @@ FormatName  ↚ ⍥$"_ with alpha"≥2⟜(⨬("grayscale"|"color")◿₂)
   ≁Data {Buffer Clone}
 
   # Unload a sound, freeing it's memory
-  Unload ← ≡₁(Rayua~UnloadSound ⍤"Cannot free an active sound, only a source sound." Data!⊃Clone Buffer)
+  Unload ← ≡₁(Rayua.UnloadSound ⍤"Cannot free an active sound, only a source sound." Data!⊃Clone Buffer)
 
   # ActiveSound ? SourceSound
-  Play ← Data⊙1 ⊸Rayua~PlaySound Rayua~LoadSoundAlias Data~Buffer
+  Play ← Data⊙1 ⊸Rayua.PlaySound Rayua.LoadSoundAlias Data.Buffer
 
-  Start ← ⍜Data~Buffer⊸Rayua~PlaySound
+  Start ← ⍜Data.Buffer⊸Rayua.PlaySound
 └─╴
 
 ColorArg ↚ |1 ≡₁□ ⨬(
   ⍤"Color must have 1 through 4 channels" ∊⇡₁4⊸⧻₋₁ ⍥¤⊸(≍[]△)
-  °Color~Rgb ⍥⍜°⍉⬚1↙₄⊸(=3⊣△) ⍥⍜(⊢°⍉|↯3)⊸(<3⊣△)
-| °Color~Rgb ⍥⍜°⍉⬚1↙₄=3⊣⊸△ Color~Hex
+  °Color.Rgb ⍥⍜°⍉⬚1↙₄⊸(=3⊣△) ⍥⍜(⊢°⍉|↯3)⊸(<3⊣△)
+| °Color.Rgb ⍥⍜°⍉⬚1↙₄=3⊣⊸△ Color.Hex
 | ⬚255≡₀◇ColorArg
 | ⍤"Color cannot be complex"0
 ) ⊸type
-SizeArg ↚ ≡₁□ ⍥˙⊟=0⧻⊸△ T~Coords
-PosArg  ↚ ≡₁□ T~Coords
+SizeArg ↚ ≡₁□ ⍥˙⊟=0⧻⊸△ T.Coords
+PosArg  ↚ ≡₁□ T.Coords
 
 IsTexture ↚ ≍□"texture"⬚∞⊣
 
@@ -300,11 +300,11 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Once a texture is unloaded, attempting to draw it will result in an all-black texture.
   # Calling this function multiple times on a texture will not doing anything.
   # ? Texture
-  Unload ← Rayua~UnloadTexture Data~Buffer
+  Unload ← Rayua.UnloadTexture Data.Buffer
 
   # Get the dimensions of a texture
   # Size ? Texture
-  Size ← ℂ≡₁(Rayua~Texture!⊃Width Height Data~Buffer)
+  Size ← ℂ≡₁(Rayua.Texture!⊃Width Height Data.Buffer)
 
   # Load a texture from a filepath
   #
@@ -313,22 +313,22 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # `⍜LoadFile` will load the texture, and then free the memory when the function is over.
   # [NOTE] You cannot load a texture before `Open` is called, it will cause a segfault.
   # Texture ? Path
-  LoadFile ← (⌅(^0|⟜∘^0|^1))!(Data ⊙3 Rayua~LoadTexture|Unload)
+  LoadFile ← (⌅(^0|⟜∘^0|^1))!(Data ⊙3 Rayua.LoadTexture|Unload)
 
   # ? Image
   ToFullColor ↚ ⨬(⍉˜⊂1↯3|⍜°⍉⬚1↙₄|⍜°⍉(▽3_1)|∘) ⊸ColorFormat
 
   # ? Data Image
-  ToFormat ↚ |2 ⨬(⊢°⍉|⍜°⍉↙₃|⍜°⍉(⊏0_3)|∘) Data~ColorFormat
+  ToFormat ↚ |2 ⨬(⊢°⍉|⍜°⍉↙₃|⍜°⍉(⊏0_3)|∘) Data.ColorFormat
 
   # Reads the literal bytes from the buffer with no processing, only shaping
-  ReadImageData ↚ ↯⤙(&memcpy⊙/×) Rayua~Image!(Data⟜[⊃Height Width⊙4]) Data~Buffer
+  ReadImageData ↚ ↯⤙(&memcpy⊙/×) Rayua.Image!(Data⟜[⊃Height Width⊙4]) Data.Buffer
 
   ToRayImage ↚ ⌅(
-    Data ⊃(Rayua~Image ⊃(♭ °Color~Rgb ToFullColor|°⊟⇌△₂|1 7)|ColorFormat)
-  | Rayua~UnloadImage ⟜(Data~Buffer|ToFormat|Color~Rgb ReadImageData))
+    Data ⊃(Rayua.Image ⊃(♭ °Color.Rgb ToFullColor|°⊟⇌△₂|1 7)|ColorFormat)
+  | Rayua.UnloadImage ⟜(Data.Buffer|ToFormat|Color.Rgb ReadImageData))
 
-  ImageAndTextureData ↚ ⊓(⊃(⇌△₂) ColorFormat|⊃(⊟°ℂSize) Data~ColorFormat)
+  ImageAndTextureData ↚ ⊓(⊃(⇌△₂) ColorFormat|⊃(⊟°ℂSize) Data.ColorFormat)
   ImageError ↚ ⨬(
     ∩($"_ _"⊓/$"_x_"FormatName) ImageAndTextureData
     ˜⍤0 $"A _ image was provided, but the texture is a _ image."
@@ -343,8 +343,8 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Image ? Texture
   # Track caller!
   Image ← (⌅(^0|⟜^0|^1))!(
-    °ToRayImage ⍜Data~Buffer Rayua~LoadImageFromTexture
-  | ⟜(Rayua~UpdateTexture Data~Buffer)⊙(♭ °Color~Rgb ToFullColor) ◡˜ImageError)
+    °ToRayImage ⍜Data.Buffer Rayua.LoadImageFromTexture
+  | ⟜(Rayua.UpdateTexture Data.Buffer)⊙(♭ °Color.Rgb ToFullColor) ◡˜ImageError)
 
   # Load a texture from a Uiua image array
   #
@@ -355,7 +355,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # [NOTE] You cannot load a texture before `Open` is called, it will cause a segfault.
   # Texture ? Image
   LoadImage ← (⌅(^0|^1|⟜∘^0|^2))‼(
-    ⍜Data~Buffer Rayua~LoadTextureFromImage ToRayImage
+    ⍜Data.Buffer Rayua.LoadTextureFromImage ToRayImage
   | Unload⟜Image
   | Unload)
 
@@ -367,9 +367,9 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # ? Texture Size Pos
   ~Draw {Color ← White|Angle ← 0|Centered ← 0} (
     ⊃(Color|Angle|⋅∘|Centered)
-    ⊓(ColorArg | ×360◿1 | ≡₁⊃(□Data~Buffer|□⊂0_0⊟°ℂSize)
+    ⊓(ColorArg | ×360◿1 | ≡₁⊃(□Data.Buffer|□⊂0_0⊟°ℂSize)
     | ⊃(≡₀⍚⊂ ⍥(+◡⋅÷₂)¬|⋅⋅÷₂) ⊙˜⊓PosArg SizeArg)
-    ≡₀◇Rayua~DrawTexturePro S!cdefba
+    ≡₀◇Rayua.DrawTexturePro S!cdefba
   )
 └─╴
 
@@ -383,8 +383,8 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # Track caller!
   Background ← (
     ⊸IsTexture
-    ⨬(Rayua~ClearBackground ⍤"Background does not take multiple colors"≍[4]⊸△ °□ ColorArg
-    | Texture~Draw⊙(Window~Size 0_0))
+    ⨬(Rayua.ClearBackground ⍤"Background does not take multiple colors"≍[4]⊸△ °□ ColorArg
+    | Texture.Draw⊙(Window.Size 0_0))
   )
 
   # Draw a line on the window
@@ -392,7 +392,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # A line will draw from point A to point B, even if either are outside the window.
   # A width of zero will cause the line not to draw at all.
   # ? Color Width A B
-  Line ← ≡₀◇Rayua~DrawLineEx S!cdba ⊓(ColorArg|↥₀⌈|∩PosArg)
+  Line ← ≡₀◇Rayua.DrawLineEx S!cdba ⊓(ColorArg|↥₀⌈|∩PosArg)
 
   # Draw a circle on the window
   #
@@ -404,11 +404,11 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   ~Circle {Angle ← 1|Start ← 0} (
     ⊃Angle Start
     ⟜(≍1|⌈×32|∩(-90×360) ⊸+) ⊓(⍜⌵↧₁|◿₁|ColorArg|↥₀⌈|PosArg) # B Segments End Start Color Radius Center ?
-    ⨬(≡₀◇Rayua~DrawCircleSector S!fecbad|≡₀◇Rayua~DrawCircle S!fed)
+    ⨬(≡₀◇Rayua.DrawCircleSector S!fecbad|≡₀◇Rayua.DrawCircle S!fed)
   )
 
   # ? Font Size
-  LoadFont ↚ ⨬(memo(Rayua~LoadFontEx⊙⊙[])|memoRayua~GetFontDefault)⊸≍∞ ⊙(↥₅ ⍥⁅₋₁ ⊸>₁₀₀)
+  LoadFont ↚ ⨬(memo!(Rayua.LoadFontEx⊙⊙[])|memo!Rayua.GetFontDefault)⊸≍∞ ⊙(↥₅ ⍥⁅₋₁ ⊸>₁₀₀)
 
   # Print text to the window
   #
@@ -422,14 +422,14 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
     ⊙(⊓(□|∘|ColorArg|↥₀|PosArg|≡₀⍚$"_"BoxStrings)
       S!afedbc ≡₀⍚LoadFont⊙⤙⊙⊙∘ ⟜(⍥⋅◡⋅÷₁₀◇≍∞)
     ) # Centered Font Text Pos Size Spacing Color ?
-    ≡₀◇(Rayua~DrawTextEx⍥(⍜⊙⋅⋅∘- ◡(÷₂Rayua~MeasureTextEx⊙⊙⋅⊙∘)))
+    ≡₀◇(Rayua.DrawTextEx⍥(⍜⊙⋅⋅∘- ◡(÷₂Rayua.MeasureTextEx⊙⊙⋅⊙∘)))
   )
 
   # Draw a rectangle on the window
   #
   # Optional args: Centered
   # ? Color Size Position
-  ~Rect [Centered ← 0] ≡₀◇Rayua~DrawRectangle S!bca ⊓(ColorArg|⍥(≡₀⍚-◡⋅÷₂) ⊙˜⊓PosArg SizeArg) ⊃⋅∘Centered # TODO: Change back once pervasion is fixed
+  ~Rect [Centered ← 0] ≡₀◇Rayua.DrawRectangle S!bca ⊓(ColorArg|⍥(≡₀⍚-◡⋅÷₂) ⊙˜⊓PosArg SizeArg) ⊃⋅∘Centered # TODO: Change back once pervasion is fixed
 
   # Draw a square on the window
   #
@@ -444,13 +444,13 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   #
   # The points `A`, `B`, and `C` may be in any order
   # ? Color A B C
-  Triangle ← ≡₀◇(Rayua~DrawTriangle ⍥˜⊙∘◡PointOrder) ⤚⋅⊙⊙∘ ⊓(ColorArg|∩₃PosArg)
+  Triangle ← ≡₀◇(Rayua.DrawTriangle ⍥˜⊙∘◡PointOrder) ⤚⋅⊙⊙∘ ⊓(ColorArg|∩₃PosArg)
 
-  Texture ← Texture~Draw
+  Texture ← Texture.Draw
 
   RenderTxDims ↚ (°ℂ↥Window!⊃FullSize Size)
-  RenderTxRect ↚ (memo[⊃⊓⋅0∘⊓∘¯ RenderTxDims])
-  RenderTx     ↚ (memo(Rayua~LoadRenderTexture RenderTxDims))
+  RenderTxRect ↚ (memo![⊃⊓⋅0∘⊓∘¯ RenderTxDims])
+  RenderTx     ↚ (memo!(Rayua.LoadRenderTexture RenderTxDims))
 
   # Draw to the Canvas, then draw the canvas to the window
   #
@@ -458,15 +458,15 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # On its own, this is indistinguishable from normal drawing. However, the state of the canvas is maintained even when the window is cleared.
   # This makes certain kinds of graphical programs much simpler, as they don't have to redraw the entire window each frame.
   Canvas! ← (
-    Rayua~BeginTextureMode RenderTx
+    Rayua.BeginTextureMode RenderTx
     ^
-    Rayua~EndTextureMode
-    Rayua~DrawTextureRec⊃(Rayua~RenderTexture~Texture RenderTx|RenderTxRect|[0 0]|[255 255 255 255])
+    Rayua.EndTextureMode
+    Rayua.DrawTextureRec⊃(Rayua.RenderTexture.Texture RenderTx|RenderTxRect|[0 0]|[255 255 255 255])
   )
 └─╴
 
 ┌─╴Key
-  (⍚˙$"_ ← ∘Rayua~Key~_  # The keycode for the _ key\n"
+  ( ⍚˙$"_ ← ∘Rayua~Key~_  # The keycode for the _ key\n"
   )^!(Backspace|Tab|Enter|Delete|Home|End|Insert|PageUp|PageDown|Escape|Pause|LeftControl|RightControl|LeftShift|RightShift)
   Space ← @\s
 
@@ -474,15 +474,15 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
 
   # Check if a key was pressed once
   # IsPressed ? Key
-  Pressed ← ≡₀◇(Rayua~IsKeyPressed Fix)
+  Pressed ← ≡₀◇(Rayua.IsKeyPressed Fix)
 
   # Check if a key was released once
   # IsPressed ? Key
-  Released ← ≡₀◇(Rayua~IsKeyReleased Fix)
+  Released ← ≡₀◇(Rayua.IsKeyReleased Fix)
 
   # Check if a key is down
   # IsDown ? Key
-  Down ← ≡₀◇(Rayua~IsKeyDown Fix)
+  Down ← ≡₀◇(Rayua.IsKeyDown Fix)
 
   # Call a function when a key is pressed
   # 
@@ -516,14 +516,14 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # This function returns a string of queued characters
   # If the user has not typed since the function was called, the string will be empty
   # TypedChars ?
-  Typed ← (⍥(˜⊂▽⊸≠@\0Rayua~GetCharPressed)∞ "")
+  Typed ← (⍥(˜⊂▽⊸≠@\0Rayua.GetCharPressed)∞ "")
 
   # Get the key codes that the user has typed
   # 
   # This function returns an array of queued key codes
   # If the user has not typed since the function was called, the array will be empty
   # TypedCodes ?
-  TypedCodes ← (⍥(˜⊂▽⊸≠0Rayua~GetKeyPressed)∞ [])
+  TypedCodes ← (⍥(˜⊂▽⊸≠0Rayua.GetKeyPressed)∞ [])
 
   # Emulate a text input on a string
   # 
@@ -533,14 +533,14 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   # EditedText ? Text
   Input ← (
     ⊸˜∊Delete TypedCodes ˜⊂Typed
-    ⨬(⍥(⍜↻↘₂-₁⊸˜⨂@\0) ⧻⊚⊸=@\0 ˜⊂ ˜⊏"\0\n\t"▽⊸≠∞⬚∞⨂[Backspace Enter Tab]
+    ⨬(⍥(⍜↻↘₂-₁⊸˜⊗@\0) ⧻⊚⊸=@\0 ˜⊂ ˜⊏"\0\n\t"▽⊸≠∞⬚∞⊗[Backspace Enter Tab]
     | ⋅⋅"")
   )
 
   # Get an arrow key for a specific direction
   # ^: Up, v: Down, <: Left, >: Right
   # Key ? Character
-  Arrow ← get⊙(map "^v<>" Rayua~Key![Up Down Left Right])
+  Arrow ← get⊙(map "^v<>" Rayua.Key![Up Down Left Right])
 
   # Get a particular function key
   # Key ? Number
@@ -560,41 +560,41 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
 └─╴
 
 ┌─╴Mouse
-  (⍚˙$"_ ← ∘Rayua~MouseButton~_  # The code for the _ mouse button\n"
+  ( ⍚˙$"_ ← ∘Rayua~MouseButton~_  # The code for the _ mouse button\n"
   )^!(Left|Right|Middle|Side|Extra|Forward|Back)
 
   # Check if a mouse button was pressed once
   # IsPressed ? Button
-  Pressed ← ≡₀Rayua~IsMouseButtonPressed
+  Pressed ← ≡₀Rayua.IsMouseButtonPressed
 
   # Check if a mouse button was released once
   # IsReleased ? Button
-  Released ← ≡₀Rayua~IsMouseButtonReleased
+  Released ← ≡₀Rayua.IsMouseButtonReleased
 
   # Check if a mouse button is down
   # IsDown ? Button
-  Down ← ≡₀Rayua~IsMouseButtonDown
+  Down ← ≡₀Rayua.IsMouseButtonDown
 
   # The current position of the mouse
   # MousePos ?
-  Pos ← (°T~Coords Rayua~GetMousePosition)
+  Pos ← (°T.Coords Rayua.GetMousePosition)
 
   # How many pixels the mouse has moved since the last frame
   # MouseMovementVector ?
-  Change ← (°T~Coords Rayua~GetMouseDelta)
+  Change ← (°T.Coords Rayua.GetMouseDelta)
 
   # Hide the mouse from the user
   # 
   # `°Hide` will make the mouse reappear.
   # The user can still use the mouse while it it hidden. The effect is purely visual.
-  Hide ← ⌅(Rayua~HideCursor|Rayua~ShowCursor)
+  Hide ← ⌅(Rayua.HideCursor|Rayua.ShowCursor)
 
   # The direction the mouse is scrolling
   # 
   # Returns `0` if the mouse has not scrolled, and `1` or `¯1` depending on the direction scrolled.
   # The sign may not nicely correspond to 'up' or 'down' since the direction of scrolling depends on the user's device.
   # ScrollDir ?
-  Scroll ← (⊣Rayua~GetMouseWheelMoveV)
+  Scroll ← (⊣Rayua.GetMouseWheelMoveV)
 
   # Call a function on the scroll direction when the wheel is scrolled
   # 
@@ -633,7 +633,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
 
   # Check if the mouse is on the window
   # IsOnWindow ?
-  OnWindow ← (Rayua~IsCursorOnScreen)
+  OnWindow ← (Rayua.IsCursorOnScreen)
 └─╴
 
 # Work with gamepads/game controllers
@@ -641,26 +641,26 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
 # All functions take a gamepad index as the first input. If you are only using one gamepad, this will probably need to be 0.
 ┌─╴Gamepad
   ┌─╴Button
-    (⍚˙$"_ ← ∘Rayua~GamepadButton~_  # The button code for the _ button\n"
+    ( ⍚˙$"_ ← ∘Rayua~GamepadButton~_  # The button code for the _ button\n"
     )^!(Unknown|LeftFaceUp|LeftFaceRight|LeftFaceDown|LeftFaceLeft|RightFaceUp|RightFaceRight|RightFaceDown|RightFaceLeft|LeftTrigger₁|LeftTrigger₂|RightTrigger₁|RightTrigger₂|MiddleLeft|Middle|MiddleRight|LeftThumb|RightThumb)
 
     # The button code for the d-pad up button
-    Up ← Rayua~GamepadButton~LeftFaceUp
+    Up ← Rayua.GamepadButton.LeftFaceUp
     # The button code for the d-pad right button
-    Right ← Rayua~GamepadButton~LeftFaceRight
+    Right ← Rayua.GamepadButton.LeftFaceRight
     # The button code for the d-pad down button
-    Down ← Rayua~GamepadButton~LeftFaceDown
+    Down ← Rayua.GamepadButton.LeftFaceDown
     # The button code for the d-pad left button
-    Left ← Rayua~GamepadButton~LeftFaceLeft
+    Left ← Rayua.GamepadButton.LeftFaceLeft
 
     # The button code for the top face button
-    North ← Rayua~GamepadButton~RightFaceUp
+    North ← Rayua.GamepadButton.RightFaceUp
     # The button code for the right face button
-    East ← Rayua~GamepadButton~RightFaceRight
+    East ← Rayua.GamepadButton.RightFaceRight
     # The button code for the bottom face button
-    South ← Rayua~GamepadButton~RightFaceDown
+    South ← Rayua.GamepadButton.RightFaceDown
     # The button code for the left face button
-    West ← Rayua~GamepadButton~RightFaceLeft
+    West ← Rayua.GamepadButton.RightFaceLeft
 
     # The button code for the left bumper
     LeftBumper ← LeftTrigger₁
@@ -683,29 +683,29 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   └─╴
 
   ┌─╴Axis
-    (⍚˙$"_ ← ∘Rayua~GamepadAxis~_  # The axis code for the _ axis\n"
+    ( ⍚˙$"_ ← ∘Rayua~GamepadAxis~_  # The axis code for the _ axis\n"
     )^!(LeftX|LeftY|RightX|RightY|LeftTrigger|RightTrigger)
   └─╴
 
   # Check if a gamepad is available
   # IsAvailable ? Gamepad
-  Available ← Rayua~IsGamepadAvailable
+  Available ← Rayua.IsGamepadAvailable
 
   # Get the name of a gamepad
   # Name ? Gamepad
-  Name ← Rayua~GetGamepadName
+  Name ← Rayua.GetGamepadName
 
   # Check if a gamepad button was pressed once
   # IsPressed ? Gamepad Button
-  Pressed ← ≡₀◇Rayua~IsGamepadButtonPressed
+  Pressed ← ≡₀◇Rayua.IsGamepadButtonPressed
 
   # Check if a gamepad button was released once
   # IsReleased ? Gamepad Button
-  Released ← ≡₀◇Rayua~IsGamepadButtonReleased
+  Released ← ≡₀◇Rayua.IsGamepadButtonReleased
 
   # Check if a gamepad button is down
   # IsDown ? Gamepad Button
-  Down ← ≡₀◇Rayua~IsGamepadButtonDown
+  Down ← ≡₀◇Rayua.IsGamepadButtonDown
 
   # Call a function when a button is pressed
   # 
@@ -742,7 +742,7 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
 
   # Get the current position of a gamepad axis
   # AxisMovement ? Gamepad Axis
-  GetAxis ← ≡₀◇Rayua~GetGamepadAxisMovement
+  GetAxis ← ≡₀◇Rayua.GetGamepadAxisMovement
 
   # Get the current position of a joystick as a complex number
   # 
@@ -757,17 +757,17 @@ IsTexture ↚ ≍□"texture"⬚∞⊣
   Trigger ← °(-⊸¬)≡₀◇(GetAxis ⊙Axis!⨬LeftTrigger RightTrigger)
 
   # ? Gamepad LeftRumble RightRumble Duration
-  Rumble ← Rayua~SetGamepadVibration
+  Rumble ← Rayua.SetGamepadVibration
 └─╴
 
 # Open a new window with a title
 # ? Size Title
-Open ← Rayua~InitWindow ⊓(°⊟ ⍥(↯2)≍[]⊸△ T~Coords|$"_") Rayua~SetTraceLogLevel Rayua~TraceLogLevel~Warning
+Open ← Rayua.InitWindow ⊓(°⊟ ⍥(↯2)≍[]⊸△ T.Coords|$"_") Rayua.SetTraceLogLevel Rayua.TraceLogLevel.Warning
 
 # ? Conditional Body
-Loop‼ ← Rayua~CloseWindow ⍢(
-  Rayua~EndDrawing ^1 Rayua~BeginDrawing
-| ×¬Rayua~WindowShouldClose ^0)
+Loop‼ ← Rayua.CloseWindow ⍢(
+  Rayua.EndDrawing ^1 Rayua.BeginDrawing
+| ×¬Rayua.WindowShouldClose ^0)
 
 # ? Body
 Loop! ← Loop‼1^
